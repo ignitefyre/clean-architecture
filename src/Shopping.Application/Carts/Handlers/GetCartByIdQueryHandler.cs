@@ -6,8 +6,23 @@ namespace Shopping.Application.Carts.Handlers;
 
 public class GetCartByIdQueryHandler : IRequestHandler<GetCartByIdQuery, Result<CartDto>>
 {
-    public Task<Result<CartDto>> Handle(GetCartByIdQuery request, CancellationToken cancellationToken)
+    private readonly ICartRepository _repository;
+
+    public GetCartByIdQueryHandler(ICartRepository repository)
     {
-        throw new NotImplementedException();
+        _repository = repository;
+    }
+    public async Task<Result<CartDto>> Handle(GetCartByIdQuery request, CancellationToken cancellationToken)
+    {
+        var result = _repository.GetById(request.Id);
+
+        if (result.IsFailed)
+            return result.ToResult<CartDto>();
+
+        var response = new CartDto(
+            result.Value.Id,
+            result.Value.GetItems().Select(x => new CartItemDto(x.Id, x.Quantity)).ToList());
+
+        return Result.Ok(response);
     }
 }

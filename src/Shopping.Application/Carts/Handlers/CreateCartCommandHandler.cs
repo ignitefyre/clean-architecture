@@ -6,8 +6,18 @@ namespace Shopping.Application.Carts.Handlers;
 
 public class CreateCartCommandHandler : IRequestHandler<CreateCartCommand, Result<string>>
 {
-    public Task<Result<string>> Handle(CreateCartCommand request, CancellationToken cancellationToken)
+    private readonly ICartRepository _repository;
+
+    public CreateCartCommandHandler(ICartRepository repository)
     {
-        throw new NotImplementedException();
+        _repository = repository;
+    }
+    public async Task<Result<string>> Handle(CreateCartCommand request, CancellationToken cancellationToken)
+    {
+        var result = _repository.Create();
+
+        return result.IsFailed ?
+            result.ToResult<string>() :
+            Result.Ok(result.Value.Id);
     }
 }

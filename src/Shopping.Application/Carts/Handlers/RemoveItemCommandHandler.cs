@@ -6,8 +6,25 @@ namespace Shopping.Application.Carts.Handlers;
 
 public class RemoveItemCommandHandler : IRequestHandler<RemoveItemCommand, Result>
 {
-    public Task<Result> Handle(RemoveItemCommand request, CancellationToken cancellationToken)
+    private readonly ICartRepository _repository;
+
+    public RemoveItemCommandHandler(ICartRepository repository)
     {
-        throw new NotImplementedException();
+        _repository = repository;
+    }
+    public async Task<Result> Handle(RemoveItemCommand request, CancellationToken cancellationToken)
+    {
+        var (productId, cartId) = request;
+        
+        var result = _repository.GetById(cartId);
+        
+        if (result.IsFailed)
+            return result.ToResult();
+
+        var cart = result.Value;
+        
+        cart.RemoveItem(productId);
+
+        return _repository.Update(cart);
     }
 }

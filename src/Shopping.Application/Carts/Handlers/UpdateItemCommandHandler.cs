@@ -6,8 +6,32 @@ namespace Shopping.Application.Carts.Handlers;
 
 public class UpdateItemCommandHandler : IRequestHandler<UpdateItemCommand, Result>
 {
-    public Task<Result> Handle(UpdateItemCommand request, CancellationToken cancellationToken)
+    private readonly ICartRepository _repository;
+
+    public UpdateItemCommandHandler(ICartRepository repository)
     {
-        throw new NotImplementedException();
+        _repository = repository;
+    }
+    public async Task<Result> Handle(UpdateItemCommand request, CancellationToken cancellationToken)
+    {
+        var (productId, quantity, cartId) = request;
+        
+        var result = _repository.GetById(cartId);
+        
+        if (result.IsFailed)
+            return result.ToResult();
+
+        var cart = result.Value;
+        
+        if (request.Quantity > 0)
+        {
+            cart.UpdateItemQuantity(productId, quantity);
+        }
+        else
+        {
+            cart.RemoveItem(request.ProductId);
+        }
+        
+        return _repository.Update(cart);
     }
 }
