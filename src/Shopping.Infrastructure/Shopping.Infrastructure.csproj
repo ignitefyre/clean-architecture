@@ -12,10 +12,7 @@
 
     <ItemGroup>
       <PackageReference Include="FluentResults" Version="3.11.0" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Carts" />
+      <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
     </ItemGroup>
 
 </Project>

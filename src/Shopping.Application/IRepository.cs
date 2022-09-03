@@ -1,6 +1,10 @@
+using FluentResults;
+using Shopping.Domain;
+
 namespace Shopping.Application;
 
-public interface IRepository
+public interface IRepository<T> where T : AggregateRoot
 {
-    
+    Result<T> GetById(string id);
+    Result Update(T entity);
 }
