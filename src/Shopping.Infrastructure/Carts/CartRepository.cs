@@ -9,14 +9,14 @@ public class CartRepository : ICartRepository
 {
     private static readonly List<CartData> _cart = new List<CartData>();
     
-    public Result<Cart> Create()
+    public async Task<Result<Cart>> Create()
     {
         var cart = new CartData();
         _cart.Add(cart);
         return Result.Ok(new Cart(cart.Id));
     }
 
-    public Result<Cart> GetById(string id)
+    public async Task<Result<Cart>> GetById(string id)
     {
         var cart = _cart.FirstOrDefault(x => x.Id == id);
 
@@ -27,7 +27,7 @@ public class CartRepository : ICartRepository
         return Result.Ok(new Cart(cart.Id, items));
     }
 
-    public Result Update(Cart entity)
+    public async Task<Result> Update(Cart entity)
     {
         var cart = _cart.FirstOrDefault(x => x.Id == entity.Id);
 

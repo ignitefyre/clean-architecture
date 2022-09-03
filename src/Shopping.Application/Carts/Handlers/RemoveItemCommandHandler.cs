@@ -16,7 +16,7 @@ public class RemoveItemCommandHandler : IRequestHandler<RemoveItemCommand, Resul
     {
         var (productId, cartId) = request;
         
-        var result = _repository.GetById(cartId);
+        var result = await _repository.GetById(cartId);
         
         if (result.IsFailed)
             return result.ToResult();
@@ -25,6 +25,6 @@ public class RemoveItemCommandHandler : IRequestHandler<RemoveItemCommand, Resul
         
         cart.RemoveItem(productId);
 
-        return _repository.Update(cart);
+        return await _repository.Update(cart);
     }
 }

@@ -16,7 +16,7 @@ public class UpdateItemCommandHandler : IRequestHandler<UpdateItemCommand, Resul
     {
         var (productId, quantity, cartId) = request;
         
-        var result = _repository.GetById(cartId);
+        var result = await _repository.GetById(cartId);
         
         if (result.IsFailed)
             return result.ToResult();
@@ -32,6 +32,6 @@ public class UpdateItemCommandHandler : IRequestHandler<UpdateItemCommand, Resul
             cart.RemoveItem(request.ProductId);
         }
         
-        return _repository.Update(cart);
+        return await _repository.Update(cart);
     }
 }

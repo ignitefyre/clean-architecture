@@ -5,7 +5,7 @@ namespace Shopping.Application;
 
 public interface IRepository<T> where T : AggregateRoot
 {
-    Result<T> Create();
-    Result<T> GetById(string id);
-    Result Update(T entity);
+    Task<Result<T>> Create();
+    Task<Result<T>> GetById(string id);
+    Task<Result> Update(T entity);
 }

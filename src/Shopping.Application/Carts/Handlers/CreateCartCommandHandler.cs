@@ -14,7 +14,7 @@ public class CreateCartCommandHandler : IRequestHandler<CreateCartCommand, Resul
     }
     public async Task<Result<string>> Handle(CreateCartCommand request, CancellationToken cancellationToken)
     {
-        var result = _repository.Create();
+        var result = await _repository.Create();
 
         return result.IsFailed ?
             result.ToResult<string>() :
