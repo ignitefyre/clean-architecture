@@ -14,10 +14,16 @@ namespace Shopping.Api.Controllers
     public class CartsController : ControllerBase
     {
         private ISender Mediatr => HttpContext.RequestServices.GetRequiredService<ISender>();
-
+        
         [HttpGet]
         [Route("{cartId}")]
         public async Task<IActionResult> GetCart([FromRoute] string cartId)
+        {
+            return Ok();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateCart()
         {
             return Ok();
         }

@@ -8,7 +8,10 @@
 
     <ItemGroup>
       <Folder Include="Events" />
-      <Folder Include="Exceptions" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="FluentResults" Version="3.11.0" />
     </ItemGroup>
 
 </Project>
