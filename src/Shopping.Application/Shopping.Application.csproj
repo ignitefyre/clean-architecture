@@ -10,4 +10,15 @@
       <ProjectReference Include="..\Shopping.Domain\Shopping.Domain.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="FluentResults" Version="3.11.0" />
+      <PackageReference Include="MediatR" Version="10.0.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Carts\Commands" />
+      <Folder Include="Carts\Handlers" />
+      <Folder Include="Carts\Queries" />
+    </ItemGroup>
+
 </Project>

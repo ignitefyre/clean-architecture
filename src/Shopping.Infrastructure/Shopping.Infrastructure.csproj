@@ -10,4 +10,12 @@
       <ProjectReference Include="..\Shopping.Application\Shopping.Application.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="FluentResults" Version="3.11.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Carts" />
+    </ItemGroup>
+
 </Project>
