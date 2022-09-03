@@ -6,6 +6,9 @@ using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Shopping.Api.Models;
+using Shopping.Application.Carts.Commands;
+using Shopping.Application.Carts.Queries;
+using Shopping.Domain.Errors;
 
 namespace Shopping.Api.Controllers
 {
@@ -13,40 +16,109 @@ namespace Shopping.Api.Controllers
     [ApiController]
     public class CartsController : ControllerBase
     {
+        private const string Version = "1.0";
         private ISender Mediatr => HttpContext.RequestServices.GetRequiredService<ISender>();
+        
+        [HttpPost]
+        public async Task<IActionResult> CreateCart()
+        {
+            try
+            {
+                var result = await Mediatr.Send(new CreateCartCommand());
+
+                return result.IsFailed
+                    ? StatusCode(500)
+                    : Created(
+                        new Uri($"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}/api/carts/{result.Value}", UriKind.Absolute),
+                        new SuccessResponse(result.Value, Version));
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500);
+            }
+        }
         
         [HttpGet]
         [Route("{cartId}")]
         public async Task<IActionResult> GetCart([FromRoute] string cartId)
         {
-            return Ok();
-        }
+            try
+            {
+                var result = await Mediatr.Send(new GetCartByIdQuery(cartId));
 
-        [HttpPost]
-        public async Task<IActionResult> CreateCart()
-        {
-            return Ok();
+                if (result.IsFailed && result.HasError<CartNotFoundError>())
+                    return NotFound();
+
+                var cart = result.Value;
+                
+                return result.IsFailed
+                    ? StatusCode(500)
+                    : Ok(new CartResponse(cart.Id, Version,
+                        new CartResponseData(cart.Id, cart.Items.Select(x => new CartItem(x.Id, x.Quantity)).ToList())));
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500);
+            }
         }
 
         [HttpPost]
         [Route("{cartId}/items")]
         public async Task<IActionResult> AddItem([FromRoute] string cartId, [FromBody] AddItemRequest request)
         {
-            return Ok();
+            try
+            {
+                var result = await Mediatr.Send(new AddItemCommand(request.ProductId, request.Quantity, cartId));
+
+                if (result.IsFailed && result.HasError<CartNotFoundError>())
+                    return NotFound();
+                
+                return result.IsFailed ? StatusCode(500) : Created(
+                    new Uri($"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}/api/carts/{cartId}/items/{request.ProductId}", UriKind.Absolute),
+                    new SuccessResponse(cartId, Version));
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500);
+            }
         }
         
         [HttpPatch]
         [Route("{cartId}/items/{productId}")]
         public async Task<IActionResult> UpdateItem([FromRoute] string cartId, [FromRoute] string productId, [FromBody] UpdateItemRequest request)
         {
-            return Ok();
+            try
+            {
+                var result = await Mediatr.Send(new UpdateItemCommand(productId, request.Quantity, cartId));
+                
+                if (result.IsFailed && result.HasError<CartNotFoundError>())
+                    return NotFound();
+
+                return result.IsFailed ? StatusCode(500) : Ok(new SuccessResponse(cartId, Version));
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500);
+            }
         }
         
         [HttpDelete]
         [Route("{cartId}/items/{productId}")]
         public async Task<IActionResult> RemoveItem([FromRoute] string cartId, [FromRoute] string productId)
         {
-            return Ok();
+            try
+            {
+                var result = await Mediatr.Send(new RemoveItemCommand(productId, cartId));
+                
+                if (result.IsFailed && result.HasError<CartNotFoundError>())
+                    return NotFound();
+                
+                return result.IsFailed ? StatusCode(500) : Ok(new SuccessResponse(cartId, Version));
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500);
+            }
         }
     }
 }
