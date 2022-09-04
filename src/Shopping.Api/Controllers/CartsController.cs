@@ -11,8 +11,14 @@ namespace Shopping.Api.Controllers
     [ApiController]
     public class CartsController : ControllerBase
     {
+        private readonly ILogger<CartsController> _logger;
         private const string Version = "1.0";
         private ISender Mediatr => HttpContext.RequestServices.GetRequiredService<ISender>();
+
+        public CartsController(ILogger<CartsController> logger)
+        {
+            _logger = logger;
+        }
         
         [HttpPost]
         public async Task<IActionResult> CreateCart()
@@ -29,6 +35,7 @@ namespace Shopping.Api.Controllers
             }
             catch (Exception e)
             {
+                _logger.LogError(e, "Error creating a cart");
                 return StatusCode(500);
             }
         }
