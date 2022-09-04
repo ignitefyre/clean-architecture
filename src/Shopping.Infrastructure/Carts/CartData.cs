@@ -5,13 +5,12 @@ public class CartData
     public CartData()
     {
         Id = Guid.NewGuid().ToString();
+        ModifiedOn = DateTime.UtcNow;
     }
     
-    public CartData(string initialCartId)
-    {
-        Id = initialCartId;
-    }
     public string Id { get; }
+    
+    public DateTime ModifiedOn { get; set; }
 
     public ICollection<CartItemData> Items { get; set; } = new List<CartItemData>();
 }

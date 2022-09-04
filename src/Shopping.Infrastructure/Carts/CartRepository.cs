@@ -24,7 +24,7 @@ public class CartRepository : ICartRepository
             return Result.Fail(new CartNotFoundError());
 
         var items = cart.Items.Select(x => new CartItem(x.Id, x.Quantity)).ToList();
-        return Result.Ok(new Cart(cart.Id, items));
+        return Result.Ok(new Cart(cart.Id, items, cart.ModifiedOn));
     }
 
     public async Task<Result> Update(Cart entity)
@@ -34,6 +34,7 @@ public class CartRepository : ICartRepository
         if (cart == null)
             return Result.Fail(new CartNotFoundError());
 
+        cart.ModifiedOn = DateTime.UtcNow;
         cart.Items = entity.GetItems().Select(x => new CartItemData(x.Id, x.Quantity)).ToList();
 
         return Result.Ok();

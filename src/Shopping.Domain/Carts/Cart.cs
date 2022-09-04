@@ -4,10 +4,13 @@ public class Cart : AggregateRoot
 {
     public Cart(string id) : base(id) { }
     
-    public Cart(string id, ICollection<CartItem> items) : base(id)
+    public Cart(string id, ICollection<CartItem> items, DateTime modifiedOn) : base(id)
     {
         Items = items;
+        ModifiedOn = modifiedOn;
     }
+    
+    public DateTime ModifiedOn { get; private set; }
     
     private ICollection<CartItem> Items { get; } = new List<CartItem>();
 

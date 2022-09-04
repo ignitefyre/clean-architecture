@@ -1,9 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Shopping.Api.Models;
 using Shopping.Application.Carts.Commands;
@@ -12,7 +7,7 @@ using Shopping.Domain.Errors;
 
 namespace Shopping.Api.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("v1/[controller]")]
     [ApiController]
     public class CartsController : ControllerBase
     {
@@ -54,7 +49,7 @@ namespace Shopping.Api.Controllers
                 return result.IsFailed
                     ? StatusCode(500)
                     : Ok(new CartResponse(cart.Id, Version,
-                        new CartResponseData(cart.Id, cart.Items.Select(x => new CartItem(x.Id, x.Quantity)).ToList())));
+                        new CartResponseData(cart.Id, cart.Items.Select(x => new CartItem(x.Id, x.Quantity)).ToList()) { Updated = cart.ModifiedOn }));
             }
             catch (Exception e)
             {

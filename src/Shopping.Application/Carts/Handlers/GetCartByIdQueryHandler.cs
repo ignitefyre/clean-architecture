@@ -21,7 +21,8 @@ public class GetCartByIdQueryHandler : IRequestHandler<GetCartByIdQuery, Result<
 
         var response = new CartDto(
             result.Value.Id,
-            result.Value.GetItems().Select(x => new CartItemDto(x.Id, x.Quantity)).ToList());
+            result.Value.GetItems().Select(x => new CartItemDto(x.Id, x.Quantity)).ToList(),
+            result.Value.ModifiedOn);
 
         return Result.Ok(response);
     }

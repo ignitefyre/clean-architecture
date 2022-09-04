@@ -9,7 +9,6 @@ public static class DependencyInstallers
     public static IServiceCollection AddInfrastructure(this IServiceCollection services)
     {
         services.AddSingleton<ICartRepository, CartRepository>();
-        //services.AddScoped<IEventRepository, EventRepository>();
         
         return services;
     }
