@@ -15,7 +15,6 @@ namespace Shopping.Api.Controllers
     {
         private readonly ILogger<CartsController> _logger;
         private readonly IMapper _mapper;
-        private const string Version = "1.0";
         private ISender Mediatr => HttpContext.RequestServices.GetRequiredService<ISender>();
 
         public CartsController(ILogger<CartsController> logger, IMapper mapper)
@@ -35,7 +34,7 @@ namespace Shopping.Api.Controllers
                     ? StatusCode(500)
                     : Created(
                         HttpContext.Request.AsCartResourceUri(result.Value),
-                        new SuccessResponse(result.Value, Version));
+                        new CartCreatedResponse(result.Value));
             }
             catch (Exception e)
             {
@@ -81,10 +80,11 @@ namespace Shopping.Api.Controllers
                 
                 return result.IsFailed ? StatusCode(500) : Created(
                     HttpContext.Request.AsCartItemResourceUri(cartId, request.ProductId),
-                    new SuccessResponse(cartId, Version));
+                    new CartUpdatedResponse(cartId));
             }
             catch (Exception e)
             {
+                _logger.LogError(e, "Error adding item to the cart");
                 return StatusCode(500);
             }
         }
@@ -100,10 +100,10 @@ namespace Shopping.Api.Controllers
                 if (result.IsFailed && result.HasError<CartNotFoundError>())
                     return NotFound();
 
-                return result.IsFailed ? StatusCode(500) : Ok(new SuccessResponse(cartId, Version));
+                return result.IsFailed ? StatusCode(500) : Ok(new CartUpdatedResponse(cartId));
             }
             catch (Exception e)
-            {
+            {_logger.LogError(e, "Error updating item on the cart");
                 return StatusCode(500);
             }
         }
@@ -119,10 +119,11 @@ namespace Shopping.Api.Controllers
                 if (result.IsFailed && result.HasError<CartNotFoundError>())
                     return NotFound();
                 
-                return result.IsFailed ? StatusCode(500) : Ok(new SuccessResponse(cartId, Version));
+                return result.IsFailed ? StatusCode(500) : Ok(new CartUpdatedResponse(cartId));
             }
             catch (Exception e)
             {
+                _logger.LogError(e, "Error deleting item from the cart");
                 return StatusCode(500);
             }
         }

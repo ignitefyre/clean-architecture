@@ -4,9 +4,9 @@ using Shopping.Application.Carts;
 
 namespace Shopping.Api.Mappings;
 
-public class CartResponseProfileV1 : Profile
+public class CartResponseProfile : Profile
 {
-    public CartResponseProfileV1()
+    public CartResponseProfile()
     {
         CreateMap<CartDto, CartResponse>()
             .ConstructUsing((src, ctx) =>
@@ -14,7 +14,8 @@ public class CartResponseProfileV1 : Profile
                     src.Id,
                     new CartResponseData(
                         src.Id, 
-                        ctx.Mapper.Map<ICollection<CartItemDto>, List<CartItem>>(src.Items))));
+                        ctx.Mapper.Map<ICollection<CartItemDto>, List<CartItem>>(src.Items))))
+            .ForPath(x => x.Data.Updated, r => r.MapFrom(src => src.ModifiedOn));
         
         CreateMap<CartItemDto, CartItem>()
             .ConstructUsing(src => new CartItem(src.Id, src.Quantity));
