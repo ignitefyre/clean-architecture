@@ -1,9 +1,14 @@
+using AutoMapper;
+using Shopping.Api.Models;
 using Shopping.Application;
+using Shopping.Application.Carts;
 using Shopping.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+
+builder.Services.AddAutoMapper(typeof(Program));
 
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure();

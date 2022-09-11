@@ -1,3 +1,3 @@
 namespace Shopping.Api.Models;
 
-public record CartResponse(string Id, string Version, CartResponseData Data) : SuccessResponse(Id, Version);
+public record CartResponse(string Id, CartResponseData Data) : SuccessResponse(Id, "1.0");

@@ -1,5 +1,7 @@
+using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Shopping.Api.Extensions;
 using Shopping.Api.Models;
 using Shopping.Application.Carts.Commands;
 using Shopping.Application.Carts.Queries;
@@ -12,12 +14,14 @@ namespace Shopping.Api.Controllers
     public class CartsController : ControllerBase
     {
         private readonly ILogger<CartsController> _logger;
+        private readonly IMapper _mapper;
         private const string Version = "1.0";
         private ISender Mediatr => HttpContext.RequestServices.GetRequiredService<ISender>();
 
-        public CartsController(ILogger<CartsController> logger)
+        public CartsController(ILogger<CartsController> logger, IMapper mapper)
         {
             _logger = logger;
+            _mapper = mapper;
         }
         
         [HttpPost]
@@ -30,7 +34,7 @@ namespace Shopping.Api.Controllers
                 return result.IsFailed
                     ? StatusCode(500)
                     : Created(
-                        new Uri($"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}/api/carts/{result.Value}", UriKind.Absolute),
+                        HttpContext.Request.AsCartResourceUri(result.Value),
                         new SuccessResponse(result.Value, Version));
             }
             catch (Exception e)
@@ -52,14 +56,14 @@ namespace Shopping.Api.Controllers
                     return NotFound();
 
                 var cart = result.Value;
-                
+
                 return result.IsFailed
                     ? StatusCode(500)
-                    : Ok(new CartResponse(cart.Id, Version,
-                        new CartResponseData(cart.Id, cart.Items.Select(x => new CartItem(x.Id, x.Quantity)).ToList()) { Updated = cart.ModifiedOn }));
+                    : Ok(_mapper.Map<CartResponse>(cart));
             }
             catch (Exception e)
             {
+                _logger.LogError(e, "Error getting the cart");
                 return StatusCode(500);
             }
         }
@@ -76,7 +80,7 @@ namespace Shopping.Api.Controllers
                     return NotFound();
                 
                 return result.IsFailed ? StatusCode(500) : Created(
-                    new Uri($"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}/api/carts/{cartId}/items/{request.ProductId}", UriKind.Absolute),
+                    HttpContext.Request.AsCartItemResourceUri(cartId, request.ProductId),
                     new SuccessResponse(cartId, Version));
             }
             catch (Exception e)
