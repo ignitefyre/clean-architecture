@@ -1,4 +1,5 @@
 using AutoMapper;
+using Shopping.Api.Mappings;
 using Shopping.Api.Models;
 using Shopping.Application;
 using Shopping.Application.Carts;
@@ -8,7 +9,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddAutoMapper(typeof(Program));
+builder.Services.AddAutoMapper(
+    typeof(CartResponseProfile));
 
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure();
