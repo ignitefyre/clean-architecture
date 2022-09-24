@@ -11,8 +11,7 @@ public static class DependencyInstallers
     {
         services.AddMediatR(Assembly.GetExecutingAssembly());
 
-        services.AddAutoMapper(
-            typeof(CartDtoProfile));
+        services.AddAutoMapper(typeof(CartDtoProfile));
         
         return services;
     }   
