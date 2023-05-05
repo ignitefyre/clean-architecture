@@ -1,3 +1,5 @@
+using Shopping.Domain.Events;
+
 namespace Shopping.Domain.Carts;
 
 public class Cart : AggregateRoot
@@ -22,6 +24,8 @@ public class Cart : AggregateRoot
     public void AddItem(string productId, int quantity)
     {
         Items.Add(new CartItem(productId, quantity));
+        
+        AddEvent(new CartItemAddedEvent(Id, quantity, productId));
     }
     
     public void UpdateItemQuantity(string productId, int quantity)

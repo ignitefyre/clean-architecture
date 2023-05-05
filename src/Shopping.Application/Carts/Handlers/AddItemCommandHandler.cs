@@ -1,17 +1,18 @@
 using FluentResults;
 using MediatR;
 using Shopping.Application.Carts.Commands;
-using Shopping.Domain.Errors;
 
 namespace Shopping.Application.Carts.Handlers;
 
 public class AddItemCommandHandler : IRequestHandler<AddItemCommand, Result>
 {
     private readonly ICartRepository _repository;
+    private readonly IEventRepository _eventRepository;
 
-    public AddItemCommandHandler(ICartRepository repository)
+    public AddItemCommandHandler(ICartRepository repository, IEventRepository eventRepository)
     {
         _repository = repository;
+        _eventRepository = eventRepository;
     }
     
     public async Task<Result> Handle(AddItemCommand request, CancellationToken cancellationToken)
@@ -19,14 +20,24 @@ public class AddItemCommandHandler : IRequestHandler<AddItemCommand, Result>
         var (productId, quantity, cartId) = request;
 
         var result = await _repository.GetById(cartId);
-
+        
         if (result.IsFailed)
             return result.ToResult();
-
+        
         var cart = result.Value;
         
         cart.AddItem(productId, quantity);
+        
+        var updatedResult = await _repository.Update(cart);
+        
+        if (updatedResult.IsFailed)
+            return updatedResult;
+        
+        foreach (var @event in cart.Events)
+        {
+            await _eventRepository.Publish(@event);
+        }
 
-        return await _repository.Update(cart);
+        return Result.Ok();
     }
 }

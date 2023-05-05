@@ -30,6 +30,8 @@ public class CartTests : TestBase
         //assert
         sut.GetItems().Should().Contain(x => x.Id == "123");
         sut.GetItems().First(x => x.Id == "123").Quantity.Should().Be(1);
+
+        sut.Events.Count.Should().Be(1);
     }
 
     [Test]

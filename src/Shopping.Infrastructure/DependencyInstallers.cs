@@ -1,4 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
+using Shopping.Application;
 using Shopping.Application.Carts;
 using Shopping.Infrastructure.Carts;
 using Shopping.Infrastructure.Mappings;
@@ -10,6 +11,7 @@ public static class DependencyInstallers
     public static IServiceCollection AddInfrastructure(this IServiceCollection services)
     {
         services.AddSingleton<ICartRepository, CartRepository>();
+        services.AddSingleton<IEventRepository, EventRepository>();
 
         services.AddAutoMapper(typeof(CartDataProfile));
         
