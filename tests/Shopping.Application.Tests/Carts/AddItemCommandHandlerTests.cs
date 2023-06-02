@@ -32,7 +32,7 @@ public class AddItemCommandHandlerTests : TestBase
             .Setup(x => x.Update(cart))
             .ReturnsAsync(Result.Ok);
 
-        var eventRepositoryMock = new Mock<IEventRepository>();
+        var eventRepositoryMock = new Mock<IEventPublisher>();
         
         var sut = new AddItemCommandHandler(cartRepositoryMock.Object, eventRepositoryMock.Object);
         
@@ -66,7 +66,7 @@ public class AddItemCommandHandlerTests : TestBase
             .Setup(x => x.Update(cart))
             .ReturnsAsync(Result.Fail("Mock Failure"));
 
-        var eventRepositoryMock = new Mock<IEventRepository>();
+        var eventRepositoryMock = new Mock<IEventPublisher>();
         
         var sut = new AddItemCommandHandler(cartRepositoryMock.Object, eventRepositoryMock.Object);
         

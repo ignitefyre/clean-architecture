@@ -7,12 +7,12 @@ namespace Shopping.Application.Carts.Handlers;
 public class AddItemCommandHandler : IRequestHandler<AddItemCommand, Result>
 {
     private readonly ICartRepository _repository;
-    private readonly IEventRepository _eventRepository;
+    private readonly IEventPublisher _eventPublisher;
 
-    public AddItemCommandHandler(ICartRepository repository, IEventRepository eventRepository)
+    public AddItemCommandHandler(ICartRepository repository, IEventPublisher eventPublisher)
     {
         _repository = repository;
-        _eventRepository = eventRepository;
+        _eventPublisher = eventPublisher;
     }
     
     public async Task<Result> Handle(AddItemCommand request, CancellationToken cancellationToken)
@@ -35,7 +35,7 @@ public class AddItemCommandHandler : IRequestHandler<AddItemCommand, Result>
         
         foreach (var @event in cart.Events)
         {
-            await _eventRepository.Publish(@event);
+            await _eventPublisher.Publish(@event);
         }
 
         return Result.Ok();

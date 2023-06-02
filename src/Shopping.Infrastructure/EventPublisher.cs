@@ -4,7 +4,7 @@ using Shopping.Domain;
 
 namespace Shopping.Infrastructure;
 
-public class EventRepository : IEventRepository
+public class EventPublisher : IEventPublisher
 {
     public async Task Publish(IEvent @event)
     {

@@ -11,7 +11,7 @@ public static class DependencyInstallers
     public static IServiceCollection AddInfrastructure(this IServiceCollection services)
     {
         services.AddSingleton<ICartRepository, CartRepository>();
-        services.AddSingleton<IEventRepository, EventRepository>();
+        services.AddSingleton<IEventPublisher, EventPublisher>();
 
         services.AddAutoMapper(typeof(CartDataProfile));
         
