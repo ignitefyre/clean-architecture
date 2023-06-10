@@ -1,5 +1,6 @@
 using FluentAssertions;
 using Shopping.Domain.Carts;
+using Shopping.Domain.Events;
 
 namespace Shopping.Domain.Tests.Carts;
 
@@ -32,6 +33,10 @@ public class CartTests : TestBase
         sut.GetItems().First(x => x.Id == "123").Quantity.Should().Be(1);
 
         sut.Events.Count.Should().Be(1);
+        sut.Events.First().Id.Should().NotBeEmpty();
+        sut.Events.First().Type.Should().Be("Shopping.Cart.ItemAdded.v1");
+        sut.Events.First().Source.Should().Be($"urn:cart:abc");
+        sut.Events.First().GetData().Should().BeEquivalentTo(new { CartId = "abc", Quantity = 1, ProductId = "123" });
     }
 
     [Test]
