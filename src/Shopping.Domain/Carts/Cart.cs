@@ -33,13 +33,16 @@ public class Cart : AggregateRoot
         var item = Items.FirstOrDefault(x => x.Id == productId);
 
         item?.UpdateQuantity(quantity);
+        
+        AddEvent(new CartItemQuantityUpdatedEvent(Id, quantity, productId));
     }
 
     public void RemoveItem(string productId)
     {
         var item = Items.FirstOrDefault(x => x.Id == productId);
 
-        if (item != null)
-            Items.Remove(item);
+        if (item == null) return;
+        Items.Remove(item);
+        AddEvent(new CartItemRemovedEvent(Id, productId));
     }
 }

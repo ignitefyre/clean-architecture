@@ -54,6 +54,12 @@ public class CartTests : TestBase
         //assert
         sut.GetItems().Should().Contain(x => x.Id == "123");
         sut.GetItems().First(x => x.Id == "123").Quantity.Should().Be(2);
+        
+        sut.Events.Count.Should().Be(1);
+        sut.Events.First().Id.Should().NotBeEmpty();
+        sut.Events.First().Type.Should().Be("Shopping.Cart.ItemQuantityUpdated.v1");
+        sut.Events.First().Source.Should().Be($"urn:cart:abc");
+        sut.Events.First().GetData().Should().BeEquivalentTo(new { CartId = "abc", Quantity = 2, ProductId = "123" });
     }
 
     [Test]
@@ -71,5 +77,11 @@ public class CartTests : TestBase
         //assert
         sut.GetItems().Should().BeEmpty();
         sut.GetItems().Should().NotContain(x => x.Id == "123");
+        
+        sut.Events.Count.Should().Be(1);
+        sut.Events.First().Id.Should().NotBeEmpty();
+        sut.Events.First().Type.Should().Be("Shopping.Cart.ItemRemoved.v1");
+        sut.Events.First().Source.Should().Be($"urn:cart:abc");
+        sut.Events.First().GetData().Should().BeEquivalentTo(new { CartId = "abc", ProductId = "123" });
     }
 }
