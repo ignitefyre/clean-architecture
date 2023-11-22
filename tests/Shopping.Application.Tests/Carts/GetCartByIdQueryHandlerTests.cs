@@ -32,8 +32,9 @@ public class GetCartByIdQueryHandlerTests : TestBase
             cartId,
             new List<CartItemDto>
             {
-                new CartItemDto(RandomValue.String(), RandomValue.Int())
+                new CartItemDto(RandomValue.String(), RandomValue.Int(), RandomValue.Double())
             },
+            RandomValue.Double(),
             cart.ModifiedOn);
 
         var mapperMock = new Mock<IMapper>();

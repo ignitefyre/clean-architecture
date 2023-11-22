@@ -12,13 +12,16 @@ public class CartDtoProfile : Profile
                 new CartDto(
                     src.Id, 
                     ctx.Mapper.Map<ICollection<CartItem>, ICollection<CartItemDto>>(src.GetItems().ToList()),
+                    src.Total,
                     src.ModifiedOn
                     ));
 
         CreateMap<CartItem, CartItemDto>()
             .ConstructUsing((src, ctx) => 
                 new CartItemDto(
-                    src.Id, src.Quantity
+                    src.Id,
+                    src.Quantity,
+                    src.PricePerItem
                 ));
     }
 }

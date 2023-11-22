@@ -13,11 +13,15 @@ public class CartResponseProfile : Profile
                 new CartResponse(
                     src.Id,
                     new CartResponseData(
-                        src.Id, 
+                        src.Id,
+                        src.Total,
                         ctx.Mapper.Map<ICollection<CartItemDto>, List<CartItem>>(src.Items))))
             .ForPath(x => x.Data.Updated, r => r.MapFrom(src => src.ModifiedOn));
         
         CreateMap<CartItemDto, CartItem>()
-            .ConstructUsing(src => new CartItem(src.Id, src.Quantity));
+            .ConstructUsing(src => new CartItem(
+                src.Id,
+                src.Quantity,
+                src.Price));
     }
 }

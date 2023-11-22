@@ -10,4 +10,10 @@ public class CartItemData
 
     public string Id { get; }
     public int Quantity { get; }
+    public double Price { get; private set; }
+
+    public void IncludePrice(double value)
+    {
+        Price = value;
+    }
 }

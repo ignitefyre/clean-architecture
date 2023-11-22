@@ -11,6 +11,8 @@ public class Cart : AggregateRoot
         Items = items;
         ModifiedOn = modifiedOn;
     }
+
+    public double Total => Items.Sum(x => x.ItemTotal);
     
     public DateTime ModifiedOn { get; private set; }
     

@@ -1,5 +1,4 @@
 using AutoMapper;
-using Shopping.Application.Carts;
 using Shopping.Domain.Carts;
 using Shopping.Infrastructure.Carts;
 
@@ -17,6 +16,9 @@ public class CartDataProfile : Profile
                     src.ModifiedOn));
         
         CreateMap<CartItemData, CartItem>()
-            .ConstructUsing(src => new CartItem(src.Id, src.Quantity));
+            .ConstructUsing(src => new CartItem(
+                src.Id,
+                src.Quantity,
+                src.Price));
     }
 }
