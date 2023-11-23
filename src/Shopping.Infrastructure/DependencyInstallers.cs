@@ -16,6 +16,8 @@ public static class DependencyInstallers
         services.AddSingleton<IProductRepository, ProductRepository>();
         services.AddSingleton<IEventPublisher, EventPublisher>();
 
+        services.AddSingleton<KafkaHandler>();
+
         services.AddAutoMapper(typeof(CartDataProfile));
         services.AddAutoMapper(typeof(ProductDataProfile));
         
