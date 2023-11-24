@@ -3,6 +3,7 @@ using Shopping.Application;
 using Shopping.Application.Carts;
 using Shopping.Application.Products;
 using Shopping.Infrastructure.Carts;
+using Shopping.Infrastructure.Handlers;
 using Shopping.Infrastructure.Mappings;
 using Shopping.Infrastructure.Products;
 
