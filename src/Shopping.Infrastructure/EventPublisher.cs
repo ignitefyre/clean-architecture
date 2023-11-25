@@ -1,11 +1,11 @@
 using System.Text.Json;
 using CloudNative.CloudEvents;
-using CloudNative.CloudEvents.Extensions;
 using CloudNative.CloudEvents.Kafka;
 using CloudNative.CloudEvents.SystemTextJson;
 using Confluent.Kafka;
 using Shopping.Application;
 using Shopping.Domain;
+using Shopping.Infrastructure.Builders;
 using Shopping.Infrastructure.Handlers;
 
 namespace Shopping.Infrastructure;
@@ -22,26 +22,18 @@ public class EventPublisher : IEventPublisher
     
     public async Task Publish(IEvent @event)
     {
-        var formatter = new JsonEventFormatter<object?>(SerializationOptions, new JsonDocumentOptions());
+        var ce = new CloudEventBuilder(@event.Type, @event.Source)
+            .WithPartitionKey(@event.Source)
+            .WithTime(DateTime.UtcNow)
+            .WithData(@event.GetData())
+            .Build();
         
-        var cloudEvent = new CloudEvent
-        {
-            Id = @event.Id.ToString(),
-            Type = @event.Type,
-            Source = new Uri(@event.Source),
-            Time = DateTime.UtcNow,
-            DataContentType = "application/json",
-            Data = @event.GetData()
-        };
+        var formatter = new JsonEventFormatter<object?>(
+            new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }, 
+            new JsonDocumentOptions());
         
-        cloudEvent.SetPartitionKey(@event.Source);
-        
-        var kafkaMessage = cloudEvent.ToKafkaMessage(ContentMode.Structured, formatter);
+        var kafkaMessage = ce.ToKafkaMessage(ContentMode.Structured, formatter);
         
         await _producer.ProduceAsync(KafkaTopic, kafkaMessage);
-        
-        _producer.Flush();
     }
-    
-    private static JsonSerializerOptions SerializationOptions => new() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
 }
