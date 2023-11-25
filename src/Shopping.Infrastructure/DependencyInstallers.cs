@@ -3,6 +3,7 @@ using Shopping.Application;
 using Shopping.Application.Carts;
 using Shopping.Application.Products;
 using Shopping.Infrastructure.Carts;
+using Shopping.Infrastructure.Handlers;
 using Shopping.Infrastructure.Mappings;
 using Shopping.Infrastructure.Products;
 
@@ -15,6 +16,8 @@ public static class DependencyInstallers
         services.AddSingleton<ICartRepository, CartRepository>();
         services.AddSingleton<IProductRepository, ProductRepository>();
         services.AddSingleton<IEventPublisher, EventPublisher>();
+
+        services.AddSingleton<KafkaHandler>();
 
         services.AddAutoMapper(typeof(CartDataProfile));
         services.AddAutoMapper(typeof(ProductDataProfile));
