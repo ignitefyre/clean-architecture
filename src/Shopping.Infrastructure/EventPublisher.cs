@@ -33,6 +33,6 @@ public class EventPublisher : IEventPublisher
         
         var kafkaMessage = ce.ToKafkaMessage(ContentMode.Structured, formatter);
         
-        await _producer.ProduceAsync(@event.Topic, kafkaMessage);
+        await _producer.ProduceAsync(@event.GetTopicName(), kafkaMessage);
     }
 }

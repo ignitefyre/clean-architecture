@@ -6,6 +6,5 @@ public interface IEvent
     string Type { get; }
     string Source { get; }
     object? GetData();
-    
-    string Topic { get; }
+    string? GetTopicName();
 }
