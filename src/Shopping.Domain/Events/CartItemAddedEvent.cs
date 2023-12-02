@@ -1,12 +1,12 @@
 namespace Shopping.Domain.Events;
 
-public record CartItemAddedEvent(string CartId, int Quantity, string ProductId) : IEvent
+public record CartItemAddedEvent(string CartId, int Quantity, string ProductId) 
+    : EventBase("shopping-cart-item-added"), IEvent
 {
-    public Guid Id { get; } = Guid.NewGuid();
     public string Type => "Shopping.Cart.ItemAdded.v1";
     public string Source => $"urn:cart:{CartId}";
     
-    public object? GetData()
+    public override object GetData()
     {
         return new {CartId, ProductId, Quantity};
     }

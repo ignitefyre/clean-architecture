@@ -10,13 +10,19 @@ public class CartTests : TestBase
     public void ANewCartShouldNotContainItems()
     {
         //arrange
-        var sut = new Cart("abc");
+        var sut = new Cart();
 
         //act
         var results = sut.GetItems();
         
         //assert
         results.Should().BeEmpty();
+        
+        sut.Events.Count.Should().Be(1);
+        sut.Events.First().Id.Should().NotBeEmpty();
+        sut.Events.First().Type.Should().Be("Shopping.Cart.Created.v1");
+        sut.Events.First().Source.Should().Be($"urn:cart:{sut.Id}");
+        sut.Events.First().GetData().Should().BeNull();
     }
     
     [Test]

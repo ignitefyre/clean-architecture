@@ -13,7 +13,6 @@ namespace Shopping.Infrastructure;
 public class EventPublisher : IEventPublisher
 {
     private readonly IProducer<string?, byte[]> _producer;
-    private const string KafkaTopic = "shopping-cart-events";
 
     public EventPublisher(KafkaHandler kafkaHandler)
     {
@@ -22,7 +21,7 @@ public class EventPublisher : IEventPublisher
     
     public async Task Publish(IEvent @event)
     {
-        var ce = new CloudEventBuilder(@event.Type, @event.Source)
+        var ce = new CloudEventBuilder(@event.Id, @event.Type, @event.Source)
             .WithPartitionKey(@event.Source)
             .WithTime(DateTime.UtcNow)
             .WithData(@event.GetData())
@@ -34,6 +33,6 @@ public class EventPublisher : IEventPublisher
         
         var kafkaMessage = ce.ToKafkaMessage(ContentMode.Structured, formatter);
         
-        await _producer.ProduceAsync(KafkaTopic, kafkaMessage);
+        await _producer.ProduceAsync(@event.Topic, kafkaMessage);
     }
 }
