@@ -3,6 +3,7 @@ using Shopping.Application;
 using Shopping.Application.Carts;
 using Shopping.Application.Products;
 using Shopping.Infrastructure.Carts;
+using Shopping.Infrastructure.Configurators;
 using Shopping.Infrastructure.Handlers;
 using Shopping.Infrastructure.Mappings;
 using Shopping.Infrastructure.Products;
@@ -21,6 +22,11 @@ public static class DependencyInstallers
 
         services.AddAutoMapper(typeof(CartDataProfile));
         services.AddAutoMapper(typeof(ProductDataProfile));
+        
+        // Setup Kafka Topics
+        new KafkaConfigurator()
+            .WithPartitionCount(2)
+            .Configure();
         
         return services;
     }

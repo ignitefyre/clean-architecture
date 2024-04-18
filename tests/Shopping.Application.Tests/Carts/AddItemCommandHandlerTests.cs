@@ -7,6 +7,7 @@ using Shopping.Application.Carts.Commands;
 using Shopping.Application.Carts.Handlers;
 using Shopping.Domain;
 using Shopping.Domain.Carts;
+using Shopping.Domain.Events;
 
 namespace Shopping.Application.Tests.Carts;
 

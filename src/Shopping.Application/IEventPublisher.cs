@@ -1,4 +1,5 @@
 using Shopping.Domain;
+using Shopping.Domain.Events;
 
 namespace Shopping.Application;
 

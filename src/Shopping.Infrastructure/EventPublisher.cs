@@ -5,6 +5,7 @@ using CloudNative.CloudEvents.SystemTextJson;
 using Confluent.Kafka;
 using Shopping.Application;
 using Shopping.Domain;
+using Shopping.Domain.Events;
 using Shopping.Infrastructure.Builders;
 using Shopping.Infrastructure.Handlers;
 

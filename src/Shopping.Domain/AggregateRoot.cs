@@ -1,3 +1,5 @@
+using Shopping.Domain.Events;
+
 namespace Shopping.Domain;
 
 public abstract class AggregateRoot
