@@ -4,6 +4,11 @@ namespace Shopping.Domain.Carts;
 
 public class Cart : AggregateRoot
 {
+    public Cart() : base(Guid.NewGuid().ToString())
+    {
+        AddEvent(new CartCreatedEvent(Id));
+    }
+    
     public Cart(string id) : base(id) { }
     
     public Cart(string id, ICollection<CartItem> items, DateTime modifiedOn) : base(id)

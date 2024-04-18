@@ -1,4 +1,4 @@
-namespace Shopping.Domain;
+namespace Shopping.Domain.Events;
 
 public interface IEvent
 {
@@ -6,4 +6,5 @@ public interface IEvent
     string Type { get; }
     string Source { get; }
     object? GetData();
+    string? GetTopicName();
 }

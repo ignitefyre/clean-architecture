@@ -7,12 +7,11 @@ public class CloudEventBuilder
 {
     private readonly CloudEvent _cloudEvent;
 
-    public CloudEventBuilder(string type, string source)
+    public CloudEventBuilder(Guid id, string type, string source)
     {
         _cloudEvent = new CloudEvent
         {
-            // Initialize CloudEvent with required attributes
-            Id = Guid.NewGuid().ToString(),
+            Id = id.ToString(),
             Type = type,
             Source = new Uri(source)
         };
