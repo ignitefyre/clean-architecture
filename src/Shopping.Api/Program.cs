@@ -12,6 +12,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
+builder.Services.AddHttpContextAccessor();
+
 builder.Services
     .AddAuthentication(options =>
     {
@@ -22,6 +24,10 @@ builder.Services
     {
         options.Authority = "https://ignite-fyre.us.auth0.com/";
         options.Audience = "api://shopping-demo";
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            NameClaimType = ClaimTypes.NameIdentifier
+        };
     });
 
 builder.Services.AddAuthorizationBuilder()

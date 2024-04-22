@@ -13,7 +13,8 @@ public class CartDataProfile : Profile
                 new Cart(
                     src.Id,
                     ctx.Mapper.Map<ICollection<CartItemData>, ICollection<CartItem>>(src.Items),
-                    src.ModifiedOn));
+                    src.ModifiedOn,
+                    src.OwnerName));
         
         CreateMap<CartItemData, CartItem>()
             .ConstructUsing(src => new CartItem(

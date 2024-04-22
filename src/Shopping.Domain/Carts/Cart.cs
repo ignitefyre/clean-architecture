@@ -11,16 +11,18 @@ public class Cart : AggregateRoot
     
     public Cart(string id) : base(id) { }
     
-    public Cart(string id, ICollection<CartItem> items, DateTime modifiedOn) : base(id)
+    public Cart(string id, ICollection<CartItem> items, DateTime modifiedOn, string ownerName) : base(id)
     {
         Items = items;
         ModifiedOn = modifiedOn;
+        OwnerName = ownerName;
     }
 
     public double Total => Items.Sum(x => x.ItemTotal);
     
     public DateTime ModifiedOn { get; private set; }
-    
+    public string OwnerName { get; }
+
     private ICollection<CartItem> Items { get; } = new List<CartItem>();
 
     public IEnumerable<CartItem> GetItems()

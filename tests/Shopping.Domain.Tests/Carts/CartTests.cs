@@ -52,7 +52,7 @@ public class CartTests : TestBase
         var sut = new Cart("abc", new List<CartItem>
         {
             new CartItem("123", 1)
-        }, DateTime.UtcNow);
+        }, DateTime.UtcNow, "owner name");
         
         //act
         sut.UpdateItemQuantity("123", 2);
@@ -75,7 +75,7 @@ public class CartTests : TestBase
         var sut = new Cart("abc", new List<CartItem>
         {
             new CartItem("123", 1)
-        }, DateTime.UtcNow);
+        }, DateTime.UtcNow, "owner name");
         
         //act
         sut.RemoveItem("123");

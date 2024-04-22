@@ -22,6 +22,8 @@ public static class DependencyInstallers
 
         services.AddAutoMapper(typeof(CartDataProfile));
         services.AddAutoMapper(typeof(ProductDataProfile));
+
+        services.AddScoped<IUserContext, UserContext>();
         
         // Setup Kafka Topics
         // new KafkaConfigurator()

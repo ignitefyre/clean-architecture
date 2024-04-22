@@ -20,9 +20,9 @@ public class CartRepository : ICartRepository
         _mapper = mapper;
     }
     
-    public async Task<Result<Cart>> Create()
+    public async Task<Result<Cart>> Create(string ownerName)
     {
-        var cart = new CartData();
+        var cart = new CartData(ownerName);
         CartsInMemory.Add(cart);
         return Result.Ok(new Cart(cart.Id));
     }

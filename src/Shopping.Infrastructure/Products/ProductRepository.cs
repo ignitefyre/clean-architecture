@@ -18,7 +18,7 @@ public class ProductRepository : IProductRepository
         ProductsInMemory.Add(new ProductData("123", 5.99));
         ProductsInMemory.Add(new ProductData("345", 10.99));
     }
-    public Task<Result<Product>> Create()
+    public Task<Result<Product>> Create(string ownerName)
     {
         throw new NotImplementedException();
     }

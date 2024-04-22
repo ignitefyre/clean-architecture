@@ -15,7 +15,8 @@ public class CartResponseProfile : Profile
                     new CartResponseData(
                         src.Id,
                         src.Total,
-                        ctx.Mapper.Map<ICollection<CartItemDto>, List<CartItem>>(src.Items))))
+                        ctx.Mapper.Map<ICollection<CartItemDto>, List<CartItem>>(src.Items)), 
+                    src.OwnerName))
             .ForPath(x => x.Data.Updated, r => r.MapFrom(src => src.ModifiedOn));
         
         CreateMap<CartItemDto, CartItem>()

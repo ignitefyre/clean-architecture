@@ -20,9 +20,10 @@ public class AddItemCommandHandlerTests : TestBase
         var cartId = RandomValue.String();
         var productId = RandomValue.String();
         var productQuantity = RandomValue.Int();
+        var ownerName = RandomValue.String();
         
         var cartItems = new List<CartItem>();
-        var cart = new Cart(cartId, cartItems, DateTime.UtcNow);
+        var cart = new Cart(cartId, cartItems, DateTime.UtcNow, ownerName);
         
         var cartRepositoryMock = new Mock<ICartRepository>();
         cartRepositoryMock
@@ -54,9 +55,10 @@ public class AddItemCommandHandlerTests : TestBase
         var cartId = RandomValue.String();
         var productId = RandomValue.String();
         var productQuantity = RandomValue.Int();
+        var ownerName = RandomValue.String();
         
         var cartItems = new List<CartItem>();
-        var cart = new Cart(cartId, cartItems, DateTime.UtcNow);
+        var cart = new Cart(cartId, cartItems, DateTime.UtcNow, ownerName);
         
         var cartRepositoryMock = new Mock<ICartRepository>();
         cartRepositoryMock
