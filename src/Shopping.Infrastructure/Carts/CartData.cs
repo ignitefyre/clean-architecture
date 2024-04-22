@@ -2,9 +2,9 @@ namespace Shopping.Infrastructure.Carts;
 
 public class CartData
 {
-    public CartData(string ownerName)
+    public CartData(string ownerId)
     {
-        OwnerName = ownerName;
+        OwnerId = ownerId;
         Id = Guid.NewGuid().ToString();
         ModifiedOn = DateTime.UtcNow;
     }
@@ -15,5 +15,5 @@ public class CartData
 
     public ICollection<CartItemData> Items { get; set; } = new List<CartItemData>();
     
-    public string OwnerName { get; set; }
+    public string OwnerId { get; set; }
 }

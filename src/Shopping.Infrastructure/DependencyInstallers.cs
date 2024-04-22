@@ -5,6 +5,7 @@ using Shopping.Application.Products;
 using Shopping.Infrastructure.Carts;
 using Shopping.Infrastructure.Configurators;
 using Shopping.Infrastructure.Handlers;
+using Shopping.Infrastructure.Identity;
 using Shopping.Infrastructure.Mappings;
 using Shopping.Infrastructure.Products;
 

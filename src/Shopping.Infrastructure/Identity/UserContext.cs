@@ -1,8 +1,8 @@
-using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
 using Shopping.Application;
+using Shopping.Infrastructure.Identity.Extensions;
 
-namespace Shopping.Infrastructure;
+namespace Shopping.Infrastructure.Identity;
 
 internal sealed class UserContext(IHttpContextAccessor httpContextAccessor)
     : IUserContext
@@ -31,17 +31,4 @@ internal sealed class UserContext(IHttpContextAccessor httpContextAccessor)
         throw new ApplicationException("User context is unavailable");
     
     public string Title { get; }
-}
-
-internal static class ClaimsPrincipalExtensions
-{
-    public static string GetUserId(this ClaimsPrincipal? principal)
-    {
-        return principal?.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? string.Empty;
-    }
-    
-    public static string GetUserName(this ClaimsPrincipal? principal)
-    {
-        return principal?.FindFirst("usr.name")?.Value ?? string.Empty;
-    }
 }

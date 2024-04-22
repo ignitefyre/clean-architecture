@@ -8,7 +8,7 @@ public class CreateCartCommandHandler(ICartRepository repository, IUserContext u
 {
     public async Task<Result<string>> Handle(CreateCartCommand request, CancellationToken cancellationToken)
     {
-        var result = await repository.Create(userContext.Name);
+        var result = await repository.Create(userContext.UserId);
 
         return result.IsFailed ?
             result.ToResult<string>() :

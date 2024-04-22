@@ -1,10 +1,11 @@
 using FluentResults;
 using MediatR;
 using Shopping.Application.Carts.Commands;
+using Shopping.Domain.Errors;
 
 namespace Shopping.Application.Carts.Handlers;
 
-public class UpdateItemCommandHandler(ICartRepository repository) : IRequestHandler<UpdateItemCommand, Result>
+public class UpdateItemCommandHandler(ICartRepository repository, IUserContext userContext) : IRequestHandler<UpdateItemCommand, Result>
 {
     public async Task<Result> Handle(UpdateItemCommand request, CancellationToken cancellationToken)
     {
@@ -16,6 +17,9 @@ public class UpdateItemCommandHandler(ICartRepository repository) : IRequestHand
             return result.ToResult();
 
         var cart = result.Value;
+        
+        if (cart.OwnerId != userContext.UserId)
+            return Result.Fail(new CartAccessDeniedError());
         
         if (request.Quantity > 0)
         {

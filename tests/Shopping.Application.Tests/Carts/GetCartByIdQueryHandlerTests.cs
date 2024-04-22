@@ -21,9 +21,9 @@ public class GetCartByIdQueryHandlerTests : TestBase
         {
             new CartItem(RandomValue.String(), RandomValue.Int())
         };
-        var ownerName = RandomValue.String();
+        var ownerId = RandomValue.String();
         
-        var cart = new Cart(cartId, cartItems, DateTime.UtcNow, ownerName);
+        var cart = new Cart(cartId, cartItems, DateTime.UtcNow, ownerId);
         
         var cartRepositoryMock = new Mock<ICartRepository>();
         cartRepositoryMock
@@ -37,14 +37,19 @@ public class GetCartByIdQueryHandlerTests : TestBase
                 new CartItemDto(RandomValue.String(), RandomValue.Int(), RandomValue.Double())
             },
             RandomValue.Double(),
-            cart.ModifiedOn, ownerName);
+            cart.ModifiedOn, ownerId);
 
         var mapperMock = new Mock<IMapper>();
         mapperMock
             .Setup(x => x.Map<CartDto>(cart))
             .Returns(mapperResult);
         
-        var sut = new GetCartByIdQueryHandler(cartRepositoryMock.Object, mapperMock.Object);
+        var userContextMock = new Mock<IUserContext>();
+        userContextMock
+            .Setup(x => x.UserId)
+            .Returns(ownerId);
+        
+        var sut = new GetCartByIdQueryHandler(cartRepositoryMock.Object, mapperMock.Object, userContextMock.Object);
 
         //act
         var request = new GetCartByIdQuery(cartId);

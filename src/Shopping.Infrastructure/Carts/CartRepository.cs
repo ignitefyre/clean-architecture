@@ -1,5 +1,6 @@
 using AutoMapper;
 using FluentResults;
+using Shopping.Application;
 using Shopping.Application.Carts;
 using Shopping.Application.Products;
 using Shopping.Domain.Carts;
@@ -9,7 +10,7 @@ namespace Shopping.Infrastructure.Carts;
 
 public class CartRepository : ICartRepository
 {
-    private static readonly List<CartData> CartsInMemory = new List<CartData>();
+    private static readonly List<CartData> CartsInMemory = [];
     
     private readonly IProductRepository _productRepository;
     private readonly IMapper _mapper;
@@ -20,9 +21,9 @@ public class CartRepository : ICartRepository
         _mapper = mapper;
     }
     
-    public async Task<Result<Cart>> Create(string ownerName)
+    public async Task<Result<Cart>> Create(string ownerId)
     {
-        var cart = new CartData(ownerName);
+        var cart = new CartData(ownerId);
         CartsInMemory.Add(cart);
         return Result.Ok(new Cart(cart.Id));
     }

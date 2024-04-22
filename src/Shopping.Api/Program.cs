@@ -10,46 +10,7 @@ using Shopping.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
-builder.Services.AddHttpContextAccessor();
-
-builder.Services
-    .AddAuthentication(options =>
-    {
-        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-    })
-    .AddJwtBearer(options =>
-    {
-        options.Authority = "https://ignite-fyre.us.auth0.com/";
-        options.Audience = "api://shopping-demo";
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            NameClaimType = ClaimTypes.NameIdentifier
-        };
-    });
-
-builder.Services.AddAuthorizationBuilder()
-    .AddPolicy("RequireWriteCarts", policy =>
-        policy.RequireAssertion(context =>
-        {
-            var scopeClaim = context.User.FindFirst("scope")?.Value ?? "";
-            var scopes = scopeClaim.Split(' ');
-            return scopes.Contains("write:carts");
-        }))
-    .AddPolicy("RequireReadCarts", policy =>
-        policy.RequireAssertion(context =>
-        {
-            var scopeClaim = context.User.FindFirst("scope")?.Value ?? "";
-            var scopes = scopeClaim.Split(' ');
-            return scopes.Contains("read:carts");
-        }));
-
-builder.Services.AddAutoMapper(typeof(CartResponseProfile));
-
-builder.Services.AddApplication();
-builder.Services.AddInfrastructure();
+var config = builder.Configuration;
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -59,7 +20,17 @@ builder.Services.AddSwaggerGen(c =>
     c.DocumentFilter<SortEndpointsFilter>();
 });
 
+// Add services to the container.
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddAuthentication(config["Auth0:Authority"], config["Auth0:Audience"]);
+
+builder.Services.AddAutoMapper(typeof(CartResponseProfile));
+
+builder.Services.AddApplication();
+builder.Services.AddInfrastructure();
+
 builder.Services.AddEndpoints(typeof(Program).Assembly);
+builder.Services.AddEndpointPolicies();
 
 var app = builder.Build();
 

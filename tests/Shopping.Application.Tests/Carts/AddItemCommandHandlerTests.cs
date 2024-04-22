@@ -20,10 +20,10 @@ public class AddItemCommandHandlerTests : TestBase
         var cartId = RandomValue.String();
         var productId = RandomValue.String();
         var productQuantity = RandomValue.Int();
-        var ownerName = RandomValue.String();
+        var ownerId = RandomValue.String();
         
         var cartItems = new List<CartItem>();
-        var cart = new Cart(cartId, cartItems, DateTime.UtcNow, ownerName);
+        var cart = new Cart(cartId, cartItems, DateTime.UtcNow, ownerId);
         
         var cartRepositoryMock = new Mock<ICartRepository>();
         cartRepositoryMock
@@ -33,10 +33,15 @@ public class AddItemCommandHandlerTests : TestBase
         cartRepositoryMock
             .Setup(x => x.Update(cart))
             .ReturnsAsync(Result.Ok);
-
+        
         var eventRepositoryMock = new Mock<IEventPublisher>();
         
-        var sut = new AddItemCommandHandler(cartRepositoryMock.Object, eventRepositoryMock.Object);
+        var userContextMock = new Mock<IUserContext>();
+        userContextMock
+            .Setup(x => x.UserId)
+            .Returns(ownerId);
+        
+        var sut = new AddItemCommandHandler(cartRepositoryMock.Object, eventRepositoryMock.Object, userContextMock.Object);
         
         //act
         var request = new AddItemCommand(productId, productQuantity, cartId);
@@ -55,10 +60,10 @@ public class AddItemCommandHandlerTests : TestBase
         var cartId = RandomValue.String();
         var productId = RandomValue.String();
         var productQuantity = RandomValue.Int();
-        var ownerName = RandomValue.String();
+        var ownerId = RandomValue.String();
         
         var cartItems = new List<CartItem>();
-        var cart = new Cart(cartId, cartItems, DateTime.UtcNow, ownerName);
+        var cart = new Cart(cartId, cartItems, DateTime.UtcNow, ownerId);
         
         var cartRepositoryMock = new Mock<ICartRepository>();
         cartRepositoryMock
@@ -71,7 +76,12 @@ public class AddItemCommandHandlerTests : TestBase
 
         var eventRepositoryMock = new Mock<IEventPublisher>();
         
-        var sut = new AddItemCommandHandler(cartRepositoryMock.Object, eventRepositoryMock.Object);
+        var userContextMock = new Mock<IUserContext>();
+        userContextMock
+            .Setup(x => x.UserId)
+            .Returns(ownerId);
+        
+        var sut = new AddItemCommandHandler(cartRepositoryMock.Object, eventRepositoryMock.Object, userContextMock.Object);
         
         //act
         var request = new AddItemCommand(productId, productQuantity, cartId);

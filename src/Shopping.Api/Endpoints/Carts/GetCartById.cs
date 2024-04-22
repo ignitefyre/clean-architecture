@@ -20,6 +20,9 @@ public class GetCartById : IEndpoint
                 if (result.IsFailed && result.HasError<CartNotFoundError>())
                     return Results.NotFound();
                 
+                if (result.IsFailed && result.HasError<CartAccessDeniedError>())
+                    return Results.Unauthorized();
+                
                 var cart = result.Value;
 
                 return result.IsFailed

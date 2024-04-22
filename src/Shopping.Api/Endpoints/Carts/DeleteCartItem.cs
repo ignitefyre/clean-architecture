@@ -19,6 +19,9 @@ public class DeleteCartItem : IEndpoint
                 if (result.IsFailed && result.HasError<CartNotFoundError>())
                     return Results.NotFound();
                 
+                if (result.IsFailed && result.HasError<CartAccessDeniedError>())
+                    return Results.Unauthorized();
+                
                 return result.IsFailed ? Results.StatusCode(500) : Results.Ok(new CartUpdatedResponse(cartId));
             }
             catch (Exception e)

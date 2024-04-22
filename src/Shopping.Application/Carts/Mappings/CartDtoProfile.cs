@@ -14,7 +14,7 @@ public class CartDtoProfile : Profile
                     ctx.Mapper.Map<ICollection<CartItem>, ICollection<CartItemDto>>(src.GetItems().ToList()),
                     src.Total,
                     src.ModifiedOn,
-                    src.OwnerName
+                    src.OwnerId
                     ));
 
         CreateMap<CartItem, CartItemDto>()
