@@ -30,6 +30,11 @@ public class GetCartById : IEndpoint
                 logger.LogError(e, "Error getting the cart");
                 return Results.StatusCode(500);
             }
-        });
+        })
+            .WithTags("Carts")
+            .WithName("GetCartById")
+            .Produces<CartResponse>(200)
+            .Produces(404)
+            .Produces(500);
     }
 }

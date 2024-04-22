@@ -1,5 +1,6 @@
 using AutoMapper;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Shopping.Api.Extensions;
 using Shopping.Api.Models;
 using Shopping.Application.Carts.Commands;
@@ -10,7 +11,7 @@ public class CreateCart : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPost("/carts", async (IMediator mediator, ILogger<CreateCart> logger, HttpContext context) =>
+        app.MapPost("/carts", [Authorize] async (IMediator mediator, ILogger<CreateCart> logger, HttpContext context) =>
         {
             try
             {
@@ -27,6 +28,10 @@ public class CreateCart : IEndpoint
                 logger.LogError(e, "Error creating a cart");
                 return Results.StatusCode(500);
             }
-        });
+        })
+            .WithTags("Carts")
+            .WithName("CreateCart")
+            .Produces<CartCreatedResponse>(201)
+            .Produces(500);
     }
 }

@@ -25,6 +25,11 @@ public class DeleteCartItem : IEndpoint
                 logger.LogError(e, "Error deleting item from the cart");
                 return Results.StatusCode(500);
             }
-        });
+        })
+            .WithTags("Cart Items")
+            .WithName("DeleteCartItem")
+            .Produces<CartUpdatedResponse>(200)
+            .Produces(404)
+            .Produces(500);
     }
 }

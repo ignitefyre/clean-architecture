@@ -25,6 +25,11 @@ public class UpdateCartItem : IEndpoint
                 logger.LogError(e, "Error updating item on the cart");
                 return Results.StatusCode(500);
             }
-        });
+        })
+            .WithTags("Cart Items")
+            .WithName("UpdateCartItem")
+            .Produces<CartUpdatedResponse>(200)
+            .Produces(404)
+            .Produces(500);
     }
 }

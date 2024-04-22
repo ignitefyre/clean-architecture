@@ -32,6 +32,11 @@ public class AddCartItem : IEndpoint
                 logger.LogError(e, "Error adding item to the cart");
                 return Results.StatusCode(500);
             }
-        });
+        })
+            .WithTags("Cart Items")
+            .WithName("AddCartItem")
+            .Produces<CartUpdatedResponse>(201)
+            .Produces(404)
+            .Produces(500);
     }
 }
