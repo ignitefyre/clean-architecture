@@ -8,13 +8,13 @@ public class KafkaHandler : IDisposable
 
     public KafkaHandler()
     {
-        var config = new ProducerConfig
-        {
-            BootstrapServers = "localhost:9092"
-        };
-        
-        _producer = new ProducerBuilder<string?, byte[]>(config)
-            .Build();
+        // var config = new ProducerConfig
+        // {
+        //     BootstrapServers = "localhost:9092"
+        // };
+        //
+        // _producer = new ProducerBuilder<string?, byte[]>(config)
+        //     .Build();
     }
     
     public Handle Handle => _producer.Handle;

@@ -1,4 +1,5 @@
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Shopping.Api.Models;
 using Shopping.Application.Carts.Commands;
 using Shopping.Domain.Errors;
@@ -9,7 +10,7 @@ public class DeleteCartItem : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapDelete("/carts/{cartId}/items/{productId}", async (string cartId, string productId, IMediator mediator, ILogger<DeleteCartItem> logger, HttpContext context) =>
+        app.MapDelete("/carts/{cartId}/items/{productId}", [Authorize] async (string cartId, string productId, IMediator mediator, ILogger<DeleteCartItem> logger, HttpContext context) =>
         {
             try
             {
@@ -30,6 +31,7 @@ public class DeleteCartItem : IEndpoint
             .WithName("DeleteCartItem")
             .Produces<CartUpdatedResponse>(200)
             .Produces(404)
-            .Produces(500);
+            .Produces(500)
+            .RequireAuthorization("RequireWriteCarts");
     }
 }

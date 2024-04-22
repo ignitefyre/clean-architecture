@@ -1,5 +1,6 @@
 using AutoMapper;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Shopping.Api.Extensions;
 using Shopping.Api.Models;
 using Shopping.Application.Carts.Commands;
@@ -12,7 +13,7 @@ public class AddCartItem : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPost("/carts/{cartId}/items", async (string cartId, AddItemRequest request, IMediator mediator, IMapper mapper, ILogger<AddCartItem> logger, HttpContext context) =>
+        app.MapPost("/carts/{cartId}/items", [Authorize] async (string cartId, AddItemRequest request, IMediator mediator, IMapper mapper, ILogger<AddCartItem> logger, HttpContext context) =>
         {
             try
             {
@@ -37,6 +38,7 @@ public class AddCartItem : IEndpoint
             .WithName("AddCartItem")
             .Produces<CartUpdatedResponse>(201)
             .Produces(404)
-            .Produces(500);
+            .Produces(500)
+            .RequireAuthorization("RequireWriteCarts");
     }
 }

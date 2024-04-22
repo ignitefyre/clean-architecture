@@ -17,23 +17,25 @@ public class EventPublisher : IEventPublisher
 
     public EventPublisher(KafkaHandler kafkaHandler)
     {
-        _producer = new DependentProducerBuilder<string?, byte[]>(kafkaHandler.Handle).Build();
+        //_producer = new DependentProducerBuilder<string?, byte[]>(kafkaHandler.Handle).Build();
     }
     
     public async Task Publish(IEvent @event)
     {
-        var ce = new CloudEventBuilder(@event.Id, @event.Type, @event.Source)
-            .WithPartitionKey(@event.Source)
-            .WithTime(DateTime.UtcNow)
-            .WithData(@event.GetData())
-            .Build();
+        return;
         
-        var formatter = new JsonEventFormatter<object?>(
-            new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }, 
-            new JsonDocumentOptions());
-        
-        var kafkaMessage = ce.ToKafkaMessage(ContentMode.Structured, formatter);
-        
-        await _producer.ProduceAsync(@event.GetTopicName(), kafkaMessage);
+        // var ce = new CloudEventBuilder(@event.Id, @event.Type, @event.Source)
+        //     .WithPartitionKey(@event.Source)
+        //     .WithTime(DateTime.UtcNow)
+        //     .WithData(@event.GetData())
+        //     .Build();
+        //
+        // var formatter = new JsonEventFormatter<object?>(
+        //     new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }, 
+        //     new JsonDocumentOptions());
+        //
+        // var kafkaMessage = ce.ToKafkaMessage(ContentMode.Structured, formatter);
+        //
+        // await _producer.ProduceAsync(@event.GetTopicName(), kafkaMessage);
     }
 }

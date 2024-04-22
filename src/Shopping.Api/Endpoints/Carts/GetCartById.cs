@@ -1,5 +1,6 @@
 using AutoMapper;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Shopping.Api.Models;
 using Shopping.Application.Carts.Queries;
 using Shopping.Domain.Errors;
@@ -10,7 +11,7 @@ public class GetCartById : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapGet("/carts/{cartId}", async (string cartId, IMediator mediator, IMapper mapper, ILogger<GetCartById> logger, HttpContext context) =>
+        app.MapGet("/carts/{cartId}", [Authorize] async (string cartId, IMediator mediator, IMapper mapper, ILogger<GetCartById> logger, HttpContext context) =>
         {
             try
             {
@@ -35,6 +36,7 @@ public class GetCartById : IEndpoint
             .WithName("GetCartById")
             .Produces<CartResponse>(200)
             .Produces(404)
-            .Produces(500);
+            .Produces(500)
+            .RequireAuthorization("RequireReadCarts");
     }
 }

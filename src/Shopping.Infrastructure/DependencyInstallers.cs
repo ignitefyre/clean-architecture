@@ -24,9 +24,9 @@ public static class DependencyInstallers
         services.AddAutoMapper(typeof(ProductDataProfile));
         
         // Setup Kafka Topics
-        new KafkaConfigurator()
-            .WithPartitionCount(2)
-            .Configure();
+        // new KafkaConfigurator()
+        //     .WithPartitionCount(2)
+        //     .Configure();
         
         return services;
     }

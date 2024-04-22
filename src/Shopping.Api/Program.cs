@@ -21,7 +21,7 @@ builder.Services
     .AddJwtBearer(options =>
     {
         options.Authority = "https://ignite-fyre.us.auth0.com/";
-        options.Audience = "https://shopping/";
+        options.Audience = "api://shopping-demo";
     });
 
 builder.Services.AddAuthorizationBuilder()
@@ -31,6 +31,13 @@ builder.Services.AddAuthorizationBuilder()
             var scopeClaim = context.User.FindFirst("scope")?.Value ?? "";
             var scopes = scopeClaim.Split(' ');
             return scopes.Contains("write:carts");
+        }))
+    .AddPolicy("RequireReadCarts", policy =>
+        policy.RequireAssertion(context =>
+        {
+            var scopeClaim = context.User.FindFirst("scope")?.Value ?? "";
+            var scopes = scopeClaim.Split(' ');
+            return scopes.Contains("read:carts");
         }));
 
 builder.Services.AddAutoMapper(typeof(CartResponseProfile));

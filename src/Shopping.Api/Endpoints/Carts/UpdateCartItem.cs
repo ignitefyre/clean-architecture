@@ -1,4 +1,5 @@
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Shopping.Api.Models;
 using Shopping.Application.Carts.Commands;
 using Shopping.Domain.Errors;
@@ -9,7 +10,7 @@ public class UpdateCartItem : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPatch("/carts/{cartId}/items/{productId}", async (string cartId, string productId, UpdateItemRequest request, IMediator mediator, ILogger<UpdateCartItem> logger, HttpContext context) =>
+        app.MapPatch("/carts/{cartId}/items/{productId}", [Authorize] async (string cartId, string productId, UpdateItemRequest request, IMediator mediator, ILogger<UpdateCartItem> logger, HttpContext context) =>
         {
             try
             {
@@ -30,6 +31,7 @@ public class UpdateCartItem : IEndpoint
             .WithName("UpdateCartItem")
             .Produces<CartUpdatedResponse>(200)
             .Produces(404)
-            .Produces(500);
+            .Produces(500)
+            .RequireAuthorization("RequireWriteCarts");
     }
 }
