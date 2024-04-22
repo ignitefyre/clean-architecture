@@ -1,3 +1,6 @@
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Shopping.Api.Endpoints.Extensions;
 using Shopping.Api.Extensions;
@@ -9,8 +12,26 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddAuthentication();
-builder.Services.AddAuthorization();
+builder.Services
+    .AddAuthentication(options =>
+    {
+        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    })
+    .AddJwtBearer(options =>
+    {
+        options.Authority = "https://ignite-fyre.us.auth0.com/";
+        options.Audience = "https://shopping/";
+    });
+
+builder.Services.AddAuthorizationBuilder()
+    .AddPolicy("RequireWriteCarts", policy =>
+        policy.RequireAssertion(context =>
+        {
+            var scopeClaim = context.User.FindFirst("scope")?.Value ?? "";
+            var scopes = scopeClaim.Split(' ');
+            return scopes.Contains("write:carts");
+        }));
 
 builder.Services.AddAutoMapper(typeof(CartResponseProfile));
 

@@ -32,6 +32,7 @@ public class CreateCart : IEndpoint
             .WithTags("Carts")
             .WithName("CreateCart")
             .Produces<CartCreatedResponse>(201)
-            .Produces(500);
+            .Produces(500)
+            .RequireAuthorization("RequireWriteCarts");
     }
 }
